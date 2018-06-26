@@ -1,0 +1,61 @@
+<!doctype html>
+<html ng-app="myApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+    <script>
+	angular.module('myApp', [])
+.controller('mainCtrl', function($scope, $http) {
+    $http.get('http://localhost:8080/CST/errorTransaction').
+        then(function(response) {
+			console.log(response.data);
+            $scope.transactions = response.data;
+        },
+		function(data) {
+         $scope.transactions = null;
+		 $scope.error = "Failed to retrieve item from server";
+		})
+});
+	</script>
+	 <style>
+	 
+            td,th{
+                border: 1px solid gray;
+                width: 14%;
+                text-align: left;
+            }
+            table {
+                width: 100%;
+				border-spacing: 0;
+				border-collapse: collapse;	
+            }
+        </style>
+  </head>
+  <body ng-controller="mainCtrl">
+         <h1>
+           Rabo Bank - Customer Error Transactions AngularJS - RESTful API
+        </h1>
+ 
+        <table>
+            <tr>
+                <th>Reference</th>
+                <th>Account No</th>
+                <th>Description</th>
+                <th>Start Balance</th>
+                <th>Mutation</th>
+                <th>End Balance</th>
+                <th>Error Details</th>
+            </tr>
+ 
+            <tr ng-repeat="transaction in transactions">
+                <td>{{ transaction.referenceId }}</td>
+                <td>{{ transaction.accountNo }}</td>
+				<td>{{ transaction.description }}</td>
+				<td>{{ transaction.startBalance }}</td>
+				<td>{{ transaction.mutation }}</td>
+				<td>{{ transaction.endBalance }}</td>
+				<td>{{ transaction.errorDetails }}</td>
+            </tr>
+ 
+        </table>
+  </body>
+</html>
